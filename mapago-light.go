@@ -29,7 +29,22 @@ func main() {
 }
 
 func run_server(port int) {
-	fmt.Println("server handler dummy func")
+	protos := supported_disco_protos()
+	fmt.Println("supported protos: ", protos)
+
+	for _, disco_proto := range protos {
+		fmt.Println("next protocol to verify: ", disco_proto)
+	}
+}
+
+func supported_disco_protos() []string {
+	var disco_protos []string
+	disco_protos = append(disco_protos, "udp4_uc", "udp6_uc")
+	disco_protos = append(disco_protos, "udp4_mc", "udp6_mc")
+	disco_protos = append(disco_protos, "tcp4_uc", "tcp6_uc")
+	// placeholder for possible QUIC support
+
+	return disco_protos
 }
 
 func run_client(port int, addr string, proto string) {
