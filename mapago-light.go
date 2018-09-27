@@ -29,23 +29,42 @@ func main() {
 }
 
 func run_server(port int) {
+	c := make(chan []byte)
 	protos := supported_disco_protos()
+
 	fmt.Println("supported protos: ", protos)
 
-	for _, disco_proto := range protos {
-		fmt.Println("next protocol to verify: ", disco_proto)
+	// listen for incoming discovery messages
+	for _, discoProto := range protos {
+		go listen_info_req(discoProto, port, c)
+	}
+
+	// process incoming discovery messages
+	// (receive via chan, JSON decoding etc.)
+	for i := 0; i < len(protos); i++ {
+		jsonInfoReq := <- c
+		fmt.Println("info req JSON data: ", jsonInfoReq)
 	}
 }
 
 func supported_disco_protos() []string {
-	var disco_protos []string
-	disco_protos = append(disco_protos, "udp4_uc", "udp6_uc")
-	disco_protos = append(disco_protos, "udp4_mc", "udp6_mc")
-	disco_protos = append(disco_protos, "tcp4_uc", "tcp6_uc")
+	var discoProtos []string
+	discoProtos = append(discoProtos, "udp4_uc", "udp6_uc")
+	discoProtos = append(discoProtos, "udp4_mc", "udp6_mc")
+	discoProtos = append(discoProtos, "tcp4_uc", "tcp6_uc")
 	// placeholder for possible QUIC support
 
-	return disco_protos
+	return discoProtos
 }
+
+func listen_info_req(discoProto string, port int, c chan<- []byte) {
+	fmt.Println("listen for discovery over protocol: ", discoProto, "on port", port)
+
+	jsonBytes := []byte(discoProto)
+	c <- jsonBytes
+}
+
+
 
 func run_client(port int, addr string, proto string) {
 	fmt.Println("client handler dummy func")
