@@ -44,6 +44,12 @@ func run_server(port int) {
 	for i := 0; i < len(protos); i++ {
 		jsonInfoReq := <- c
 		fmt.Println("info req JSON data: ", jsonInfoReq)
+
+		// TODO: JSON parser func processing jsonInfoReq
+
+		// TODO: create_info_reply()
+
+		// TODO: send_info_reply() (as unicast)
 	}
 }
 
@@ -58,8 +64,19 @@ func supported_disco_protos() []string {
 }
 
 func listen_info_req(discoProto string, port int, c chan<- []byte) {
-	fmt.Println("listen for discovery over protocol: ", discoProto, "on port", port)
+	// TODO: udp4_uc handler func (i.e. listen, parse and return val)
 
+	// TODO: udp6_uc handler func (i.e. listen, parse and return val)
+
+	// TODO: udp4_mc handler func (i.e. listen, parse and return val)
+
+	// TODO: udp6_mc handler func (i.e. listen, parse and return val)
+
+	// TODO: tcp4_uc handler func (i.e. listen, parse and return val)
+
+	// TODO: tcp6_uc handler func (i.e. listen, parse and return val)
+
+	// dummy channel "return value"
 	jsonBytes := []byte(discoProto)
 	c <- jsonBytes
 }
